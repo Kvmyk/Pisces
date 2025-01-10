@@ -3,7 +3,7 @@ bits 64
 default rel
 ; -- variables --
 section .bss 
- -- constants --
+; -- constants --
 section .data
 ; -- Entry Point --
 section .text

@@ -56,7 +56,7 @@ out.write("""; -- variables --
 section .bss 
 """)
 
-out.write(""" -- constants --
+out.write("""; -- constants --
 section .data
 """)
 
@@ -131,7 +131,7 @@ out.close()
 print("[PiscesCMD] Assembling complete")
 os.system(f"nasm -f elf {asmFilePath}")
 print("[PiscesCMD] Linking...")
-os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+"o"}")
+os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+"psc"}")
 print("[PiscesCMD] Linking complete")
 
 print("[PiscesCMD] Running...")
