@@ -1,8 +1,8 @@
+![file (1)](https://github.com/user-attachments/assets/95a57dac-a0ea-4787-813a-6603d5ca5fda)
 # Pisces Programming Language 🌊🐟✨
 
-Pisces is a lightweight, modern programming language designed with simplicity, readability, and flexibility in mind. Perfect for beginners. Pisces consist of simple commands which you will learn like it was a piece of cake!
 
-![file](https://github.com/user-attachments/assets/004425b8-528b-4948-9de4-7102cf95056e)
+Pisces is a lightweight, modern programming language designed with simplicity, readability, and flexibility in mind. Perfect for beginners. Pisces consist of simple commands which you will learn like it was a piece of cake!
 
 ## Why Choose Pisces? 🤔
 
