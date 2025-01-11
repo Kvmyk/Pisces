@@ -16,6 +16,7 @@ pop
 ```
 ## `print`
 Prints a string literal to the console.
+
 **Syntax:**
 ```psc
 print "<your message>"
@@ -27,6 +28,7 @@ print "bul bul bul"
 
 ## `scan`
 Reads an integer from user input and pushes it onto the stack.
+
 **Syntax:**
 ```psc
 scan
@@ -55,6 +57,7 @@ end
 
 ## `sub`
 Pops two values from the stack, subtracts the second from the first, and pushes the result.
+
 **Syntax:**
 ```psc
 sub
@@ -70,6 +73,7 @@ end
 
 ## `jmpEq0`
 Jumps to a specified label if the top stack value is equal to zero.
+
 **Syntax:**
 ```psc
 jmpEq0 <label>
@@ -85,6 +89,7 @@ end
 ```
 ## `jmpGt0`
 Jumps to a specified label if the top stack value is greater than zero.
+
 **Syntax:**
 ```psc
 jmpGt0 <label>
@@ -100,6 +105,7 @@ end
 ```
 ## `end`
 Terminates the program.
+
 **Syntax:**
 ```psc
 end
