@@ -3,11 +3,11 @@ bits 64
 default rel
 ; -- variables --
 section .bss 
-read_number resq 1; 64-bits int = 8 bytes
+read_number resd 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
-stringLiteral_0: db "Hello World!", 0
+stringLiteral_0 db "Hello World!", 0
 ; -- Entry Point --
 section .text
 global main
@@ -22,11 +22,11 @@ main:
 ; -- Place -- 
 	PUSH 10
 ; -- Print -- 
-	SUB rsp, 8
+	sub rsp, 8
 	LEA rcx, stringLiteral_0
 	XOR eax, eax
 	CALL printf
-	ADD rsp, 8
+	add rsp, 8
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:

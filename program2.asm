@@ -7,8 +7,8 @@ read_number resd 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
-stringLiteral_0 db "not equal", 0
-stringLiteral_1 db "equal", 0
+stringLiteral_0 db "odd", 0
+stringLiteral_1 db "even", 0
 ; -- Entry Point --
 section .text
 global main
@@ -26,12 +26,13 @@ main:
 	XOR eax, eax
 	CALL scanf
 	PUSH qword [read_number]
-; -- Scan -- 
-	LEA rcx, read_format
-	LEA rdx, read_number
-	XOR eax, eax
-	CALL scanf
-	PUSH qword [read_number]
+; -- JmpEq0 -- 
+	CMP qword [rsp], 0
+	JE L1
+; -- Label -- 
+L2:
+; -- Place -- 
+	PUSH 2
 ; -- Sub -- 
 	POP rbx
 	POP rax
@@ -40,6 +41,9 @@ main:
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE L1
+; -- JmpGt0 -- 
+	CMP qword [rsp], 0
+	JG L2
 ; -- Print -- 
 	sub rsp, 8
 	LEA rcx, stringLiteral_0

@@ -57,7 +57,7 @@ default rel
 
 out.write("""; -- variables --
 section .bss 
-read_number resq 1; 64-bits int = 8 bytes
+read_number resd 1; 64-bits int = 8 bytes
 """)
 
 out.write("""; -- constants --
@@ -65,7 +65,7 @@ section .data
 read_format db "%d", 0; the format string for scanf
 """)
 for i, stringLiteral in enumerate(stringLiterals):
-    out.write(f"stringLiteral_{i}: db \"{stringLiteral}\", 0\n")
+    out.write(f"stringLiteral_{i} db \"{stringLiteral}\", 0\n")
 
 out.write("""; -- Entry Point --
 section .text
@@ -101,17 +101,19 @@ while ip < len(program):
         out.write(f"\tADD qword [rsp], rax\n")
     elif opCode == "sub":
         out.write(f"; -- Sub -- \n")
+        out.write(f"\tPOP rbx\n")
         out.write(f"\tPOP rax\n")
-        out.write(f"\tSUB qword [rsp], rax\n")
+        out.write(f"\tSUB rax, rbx\n")
+        out.write(f"\tPUSH rbx\n")
     elif opCode == "print":
         stringLiteralIndex = program[ip]
         ip += 1
         out.write(f"; -- Print -- \n")
-        out.write(f"\tSUB rsp, 8\n")
+        out.write(f"\tsub rsp, 8\n")
         out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
         out.write(f"\tXOR eax, eax\n")
         out.write(f"\tCALL printf\n")
-        out.write(f"\tADD rsp, 8\n")
+        out.write(f"\tadd rsp, 8\n")
     elif opCode == "scan":
         out.write(f"; -- Scan -- \n")
         out.write(f"\tLEA rcx, read_format\n")
@@ -139,12 +141,13 @@ out.write(f"EXIT_LABEL:\n")
 out.write(f"\tXOR rax, rax\n")
 out.write(f"\tCALL ExitProcess\n")
 
+
 out.close()
 
 print("[PiscesCMD] Assembling complete")
-os.system(f"nasm -f elf64 {asmFilePath}")
+os.system(f"nasm -f win64 {asmFilePath} -o {asmFilePath[:-3]}obj")
 print("[PiscesCMD] Linking...")
-os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+"o"}")
+os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+"obj"} -lkernel32 -lmsvcrt")
 print("[PiscesCMD] Linking complete")
 
 print("[PiscesCMD] Running...")
