@@ -22,14 +22,11 @@ for line in programLines:
     # zapisujemy komende do listy tokenow
     program.append(opCode)
 
-    # sprawdzanie każdego tokenu, czy jest komenda
+    # sprawdzanie każdego tokenu, czy nie ma dodatkowych argumentów
     if opCode == "place":
         number = int(parts[1])
         program.append(number)
     elif opCode == "print":
-        stringLiteral = ' '.join(parts[1:])[1:-1]
-        program.append(stringLiteral)
-    elif opCode == "display":
         stringLiteral = ' '.join(parts[1:])[1:-1]
         program.append(stringLiteral)
     elif opCode == "jmpEq0":
@@ -96,7 +93,7 @@ main:
 ip = 0
 while ip < len(program):
     opCode = program[ip]
-    ip += 1
+    ip += 1   
     if opCode.endswith(":"):
         out.write(f"; -- Label -- \n")
         out.write(f"{opCode}\n")
@@ -120,17 +117,21 @@ while ip < len(program):
         stringLiteralIndex = program[ip]
         ip += 1
         out.write(f"; -- Print -- \n")
-        if "scan" in program:
-            out.write(f"\tsub rsp, 32")
+
+        # wyrównanie stosu w zaleznosc od tego czy jest scan
+        if "scan" not in program:
+            out.write(f"\tsub rsp, 32\n")
         else:
             out.write(f"\tsub rsp, 8\n")
         out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
         out.write(f"\tXOR rax, rax\n")
         out.write(f"\tCALL printf\n")
-        if "scan" in program:
-            out.write(f"\tadd rsp, 32")
+
+        if "scan" not in program:
+            out.write(f"\tadd rsp, 32\n")
         else:
             out.write(f"\tadd rsp, 8\n")
+            
     elif opCode == "scan":
         out.write(f"; -- Scan -- \n")
         out.write(f"\tLEA rcx, read_format\n")
@@ -155,15 +156,6 @@ while ip < len(program):
     elif opCode == "end":
         out.write(f"; -- End -- \n")
         out.write(f"\tJMP EXIT_LABEL\n")
-    elif opCode == "display":
-        stringLiteralIndex = program[ip]
-        ip += 1
-        out.write(f"; -- Display -- \n")
-        out.write(f"\tsub rsp, 32\n")
-        out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
-        out.write(f"\tXOR rax, rax\n")
-        out.write(f"\tCALL printf\n")
-        out.write(f"\tadd rsp, 32\n")
 out.write(f"EXIT_LABEL:\n")
 out.write(f"\tXOR rax, rax\n")
 out.write(f"\tCALL ExitProcess\n")

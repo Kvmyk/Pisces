@@ -1,4 +1,2 @@
-display "Hello World!"
-display "Dzialam!"
-display "Przestaje dzialac :("
+print "elo"
 end
