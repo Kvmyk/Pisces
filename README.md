@@ -1,6 +1,6 @@
 # Pisces Programming Language 🌊✨
 
-Pisces is a lightweight and modern programming language designed with **simplicity**, **readability**, and **flexibility** in mind. It is perfect for both beginners and experienced developers!
+Pisces is a lightweight, modern programming language designed with simplicity, readability, and flexibility in mind. Perfect for beginners. Pisces consist of simple commands which you will learn like it was a piece of cake!
 
 ---
 
