@@ -1,21 +1,9 @@
 scan
-jmpEq0 L2
-jmpGt0 L0
-print "Negative"
-end
-
-L0:
-place 3
-sub 
+sub
 jmpEq0 L1
-jmpGt0 L0
-print "Not divisible by 3"
+print "not equal"
 end
 
 L1:
-print "Divisible by 3"
-end
-
-L2:
-print "Zero"
+print "equal"
 end
