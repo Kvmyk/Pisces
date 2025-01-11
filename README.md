@@ -1,41 +1,35 @@
 # Pisces Programming Language 🌊✨
 
-Pisces to lekki i nowoczesny język programowania, stworzony z myślą o **prostocie**, **czytelności** oraz **elastyczności**. Idealnie nadaje się zarówno dla początkujących, jak i doświadczonych programistów!
+Pisces is a lightweight and modern programming language designed with **simplicity**, **readability**, and **flexibility** in mind. It is perfect for both beginners and experienced developers!
 
 ---
 
-## Dlaczego warto wybrać Pisces? 🤔
+## Why Choose Pisces? 🤔
 
-- **Simplicity** – Prosta, intuicyjna składnia ułatwia naukę i pisanie kodu.
-- **Readability** – Dzięki przejrzystej strukturze, kod w Pisces jest łatwy w analizie i utrzymaniu.
-- **Flexibility** – Sprawdza się w małych skryptach oraz złożonych projektach.
-
----
-
-## Kluczowe funkcjonalności 🔑
-
-- **Łatwa do opanowania składnia**  
-  Skup się na rozwiązywaniu problemów, a nie zawiłościach języka.
-- **Potężne komendy**  
-  Takie jak `place`, `scan` czy `print`, umożliwiają szybkie i proste wykonywanie skomplikowanych operacji.
-- **Efektywne wykonanie**  
-  Kompilacja do wydajnego kodu asemblera gwarantuje szybkość działania.
+- **Simplicity** – A simple, intuitive syntax that makes learning and coding easy.
+- **Readability** – Thanks to its clear structure, code in Pisces is easy to analyze and maintain.
+- **Flexibility** – Works well for small scripts as well as complex projects.
 
 ---
 
-## Jak zacząć? 🚀
+## Key Features 🔑
 
-1. **Instalacja**  
-   Pobierz kompilator Pisces z https://github.com/Kvmyk/Pisces
-2. **Napisz pierwszy program**  
-   Utwórz plik z rozszerzeniem `.psc` i zacznij pisać kod za pomocą prostych komend.
-3. **Kompilacja i uruchomienie**  
-   Użyj kompilatora Pisces, aby przekształcić kod w plik wykonywalny. Gotowe!
+- **Easy-to-learn syntax**  
+  Focus on solving problems rather than dealing with the complexities of the language.
+- **Powerful commands**  
+  Commands like `place`, `scan`, and `print` enable quick and straightforward execution of complex operations.
+- **Efficient execution**  
+  Compiles down to efficient assembly code, ensuring fast performance.
 
 ---
 
-## Przykładowy kod 📝
+## Getting Started 🚀
 
-```python
-print "Hello, Pisces World!"
-end
+1. **Installation**  
+   Download the Pisces compiler from [GitHub repository](#) (insert repository link).
+2. **Write Your First Program**  
+   Create a file with the `.psc` extension and start coding using simple commands.
+3. **Compile and Run**  
+   To run Pisces code, open your terminal and use the following commands:
+   ```bash
+   python compiler.py "your_code_name".psc
