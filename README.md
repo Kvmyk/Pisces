@@ -33,3 +33,9 @@ Pisces is a lightweight and modern programming language designed with **simplici
    To run Pisces code, open your terminal and use the following commands:
    ```bash
    python compiler.py "your_code_name".psc
+
+## Write your first simple program in Pisces! ⌨️
+```
+python print "bul bul bul"
+end
+```
