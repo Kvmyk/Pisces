@@ -1,4 +1,4 @@
-![file (1)](https://github.com/user-attachments/assets/95a57dac-a0ea-4787-813a-6603d5ca5fda)
+![Logo](https://github.com/user-attachments/assets/95a57dac-a0ea-4787-813a-6603d5ca5fda)
 # Pisces Programming Language 🌊🐟✨
 
 
