@@ -120,11 +120,17 @@ while ip < len(program):
         stringLiteralIndex = program[ip]
         ip += 1
         out.write(f"; -- Print -- \n")
-        out.write(f"\tsub rsp, 8\n")
+        if "scan" in program:
+            out.write(f"\tsub rsp, 32")
+        else:
+            out.write(f"\tsub rsp, 8\n")
         out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
         out.write(f"\tXOR rax, rax\n")
         out.write(f"\tCALL printf\n")
-        out.write(f"\tadd rsp, 8\n")
+        if "scan" in program:
+            out.write(f"\tadd rsp, 32")
+        else:
+            out.write(f"\tadd rsp, 8\n")
     elif opCode == "scan":
         out.write(f"; -- Scan -- \n")
         out.write(f"\tLEA rcx, read_format\n")
