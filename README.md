@@ -26,7 +26,7 @@ Pisces is a lightweight and modern programming language designed with **simplici
 ## Getting Started 🚀
 
 1. **Installation**  
-   Download the Pisces compiler from [GitHub repository](#) (insert repository link).
+   Download the Pisces compiler from [GitHub repository](https://github.com/Kvmyk/Pisces)
 2. **Write Your First Program**  
    Create a file with the `.psc` extension and start coding using simple commands.
 3. **Compile and Run**  
