@@ -7,7 +7,7 @@ read_number resd 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
-stringLiteral_0 db "not equal", 0
+stringLiteral_0 db "not equal", 0xd,0xa, 0
 stringLiteral_1 db "equal", 0
 ; -- Entry Point --
 section .text
@@ -23,27 +23,29 @@ main:
 ; -- Scan -- 
 	LEA rcx, read_format
 	LEA rdx, read_number
-	XOR eax, eax
+	sub rsp, 32
 	CALL scanf
-	PUSH qword [read_number]
+	add rsp, 32
+	MOV rax, qword [read_number]
+	PUSH rax
 ; -- Scan -- 
 	LEA rcx, read_format
 	LEA rdx, read_number
-	XOR eax, eax
+	sub rsp, 32
 	CALL scanf
-	PUSH qword [read_number]
-; -- Sub -- 
-	POP rbx
-	POP rax
-	SUB rax, rbx
+	add rsp, 32
+	MOV rax, qword [read_number]
 	PUSH rax
+; -- Sub -- 
+	POP rax
+	SUB qword [rsp], rax
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE L1
 ; -- Print -- 
 	sub rsp, 8
 	LEA rcx, stringLiteral_0
-	XOR eax, eax
+	XOR rax, rax
 	CALL printf
 	add rsp, 8
 ; -- End -- 
@@ -53,7 +55,7 @@ L1:
 ; -- Print -- 
 	sub rsp, 8
 	LEA rcx, stringLiteral_1
-	XOR eax, eax
+	XOR rax, rax
 	CALL printf
 	add rsp, 8
 ; -- End -- 

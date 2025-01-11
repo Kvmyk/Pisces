@@ -1,7 +1,5 @@
 import sys
 import os
-import time  # Importujemy moduł time
-
 programFilePath = sys.argv[1]
 
 print("[PiscesCMD] Parsing...")
@@ -38,6 +36,18 @@ for line in programLines:
     elif opCode == "jmpGt0":
         label = parts[1]
         program.append(label)
+    elif opCode == "array":
+        size = int(parts[1])
+        program.append(size)
+    elif opCode == "load":
+        index = int(parts[1])
+        program.append(index)
+    elif opCode == "store":
+        index = int(parts[1])
+        program.append(index)
+    elif opCode == "swap":
+        index = int(parts[1])
+        program.append(index)
 
 stringLiterals = []  # Add this to collect strings
 for ip in range(len(program)):
@@ -158,6 +168,31 @@ while ip < len(program):
         out.write(f"\tXOR rax, rax\n")
         out.write(f"\tCALL printf\n")
         out.write(f"\tadd rsp, 32\n")
+    elif opCode == "array":
+        size = program[ip]
+        ip += 1
+        out.write(f"; -- Array -- \n")
+        out.write(f"\tsub rsp, {size * 8}\n")  # Allocate array on stack
+    elif opCode == "load":
+        index = program[ip]
+        ip += 1
+        out.write(f"; -- Load -- \n")
+        out.write(f"\tmov rax, [rsp + {index * 8}]\n")
+        out.write(f"\tpush rax\n")
+    elif opCode == "store":
+        index = program[ip]
+        ip += 1
+        out.write(f"; -- Store -- \n")
+        out.write(f"\tpop rax\n")
+        out.write(f"\tmov [rsp + {index * 8}], rax\n")
+    elif opCode == "swap":
+        index = program[ip]
+        ip += 1
+        out.write(f"; -- Swap -- \n")
+        out.write(f"\tmov rax, [rsp + {index * 8}]\n")
+        out.write(f"\tmov rbx, [rsp + {(index+1) * 8}]\n")
+        out.write(f"\tmov [rsp + {index * 8}], rbx\n")
+        out.write(f"\tmov [rsp + {(index+1) * 8}], rax\n")
 out.write(f"EXIT_LABEL:\n")
 out.write(f"\tXOR rax, rax\n")
 out.write(f"\tCALL ExitProcess\n")
@@ -168,15 +203,10 @@ out.close()
 print("[PiscesCMD] Assembling complete")
 os.system(f"nasm -f win64 {asmFilePath} -o {asmFilePath[:-3]}obj")
 print("[PiscesCMD] Linking...")
-os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+'obj'} -lkernel32 -lmsvcrt")
+os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+"obj"} -lkernel32 -lmsvcrt")
 print("[PiscesCMD] Linking complete")
 
 print("[PiscesCMD] Running...")
-
-start_time = time.time()  # Zaczynamy mierzyć czas
-
 os.system(f"{asmFilePath[:-4] + '.exe'} ")
 
-end_time = time.time()  # Kończymy mierzyć czas
-execution_time = end_time - start_time
-print(f"\n[PiscesCMD] Running complete in {execution_time:.2f} seconds")
+print("\n[PiscesCMD] Running complete")

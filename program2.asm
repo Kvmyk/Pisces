@@ -23,9 +23,11 @@ main:
 ; -- Scan -- 
 	LEA rcx, read_format
 	LEA rdx, read_number
-	XOR eax, eax
+	sub rsp, 32
 	CALL scanf
-	PUSH qword [read_number]
+	add rsp, 32
+	MOV rax, qword [read_number]
+	PUSH rax
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE L1
@@ -34,10 +36,8 @@ L2:
 ; -- Place -- 
 	PUSH 2
 ; -- Sub -- 
-	POP rbx
 	POP rax
-	SUB rax, rbx
-	PUSH rax
+	SUB qword [rsp], rax
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE L1

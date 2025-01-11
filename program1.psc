@@ -1,3 +1,3 @@
-place 10
-print "Hello World!"
+display "Hello World!"
+display "Dzialam!"
 end

@@ -5,15 +5,15 @@ print "Negative"
 end
 
 L0:
-place 3
+place 999
 sub
 jmpEq0 L1
 jmpGt0 L0
-print "Not divisible by 3"
+print "Not divisible by 999"
 end
 
 L1:
-print "Divisible by 3"
+print "Divisible by 999"
 end
 
 L2:
