@@ -38,6 +38,6 @@ Pisces is a lightweight, modern programming language designed with simplicity, r
 
 ## Write your first simple program in Pisces! ⌨️
 ```pcs
- print "bul bul bul"
+print "bul bul bul"
 end
 ```
