@@ -37,7 +37,7 @@ Pisces is a lightweight, modern programming language designed with simplicity, r
    python compiler.py "your_code_name".psc
 
 ## Write your first simple program in Pisces! ⌨️
-```
-python print "bul bul bul"
+```pcs
+ print "bul bul bul"
 end
 ```
