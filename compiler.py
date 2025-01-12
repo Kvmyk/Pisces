@@ -113,6 +113,23 @@ while ip < len(program):
         out.write(f"; -- Sub -- \n")
         out.write(f"\tPOP rax\n")
         out.write(f"\tSUB qword [rsp], rax\n")
+    elif opCode == "mul":
+        out.write(f"; -- Mul -- \n")
+        out.write(f"\tPOP rax\n")
+        out.write(f"\tIMUL rax, qword [rsp]\n")
+        out.write(f"\tMOV qword [rsp], rax\n")
+    elif opCode == "div":
+        out.write(f"; -- Div -- \n")
+        out.write(f"\tPOP rbx\n"), 
+        out.write(f"\tMOV rdx, 0\n")
+        out.write(f"\tIDIV rbx\n")
+        out.write(f"\tMOV qword [rsp], rax\n")
+    elif opCode == "mod":
+        out.write(f"; -- Mod -- \n")
+        out.write(f"\tPOP rbx\n")
+        out.write(f"\tMOV rdx, 0\n")
+        out.write(f"\tIDIV rbx\n")
+        out.write(f"\tMOV qword [rsp], rdx\n")
     elif opCode == "print":
         stringLiteralIndex = program[ip]
         ip += 1
