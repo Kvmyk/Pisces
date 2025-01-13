@@ -41,11 +41,7 @@ for ip in range(len(program)):
     if program[ip] == "print":
         stringLiteral = program[ip+1]
         program[ip+1] = len(stringLiterals)
-        stringLiterals.append(stringLiteral)
-    if program[ip] == "display":
-        stringLiteral = program[ip+1]
-        program[ip+1] = len(stringLiterals)
-        stringLiterals.append(stringLiteral)       
+        stringLiterals.append(stringLiteral) 
 
 print("[PiscesCMD] Parsing complete")
 
@@ -63,7 +59,7 @@ default rel
 
 out.write("""; -- variables --
 section .bss 
-read_number resd 1; 64-bits int = 8 bytes
+read_number resq 1; 64-bits int = 8 bytes
 """)
 
 out.write("""; -- constants --
@@ -104,7 +100,7 @@ while ip < len(program):
         out.write(f"\tPUSH {number}\n")
     elif opCode == "pop":
         out.write(f"; -- Pop -- \n")
-        out.write(f"\tPOP\n")
+        out.write(f"\tPOP rax\n")
     elif opCode == "add":
         out.write(f"; -- Add -- \n")
         out.write(f"\tPOP rax\n")
@@ -134,21 +130,18 @@ while ip < len(program):
         stringLiteralIndex = program[ip]
         ip += 1
         out.write(f"; -- Print -- \n")
-
-        # wyrównanie stosu w zaleznosc od tego czy jest scan
-        if "scan" not in program:
-            out.write(f"\tsub rsp, 32\n")
-        else:
+        out.write(f"\tPOP rdx\n")
+        if 'scan' not in program:
             out.write(f"\tsub rsp, 8\n")
+        else:
+            out.write(f"\tsub rsp, 32\n")
         out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
         out.write(f"\tXOR rax, rax\n")
         out.write(f"\tCALL printf\n")
-
-        if "scan" not in program:
-            out.write(f"\tadd rsp, 32\n")
-        else:
+        if 'scan' not in program:
             out.write(f"\tadd rsp, 8\n")
-            
+        else:
+            out.write(f"\tadd rsp, 32\n")
     elif opCode == "scan":
         out.write(f"; -- Scan -- \n")
         out.write(f"\tLEA rcx, read_format\n")

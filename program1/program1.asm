@@ -3,7 +3,7 @@ bits 64
 default rel
 ; -- variables --
 section .bss 
-read_number resd 1; 64-bits int = 8 bytes
+read_number resq 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
@@ -20,11 +20,12 @@ main:
 	MOV rbp, rsp
 	SUB rsp, 32
 ; -- Print -- 
-	sub rsp, 32
+	POP rdx
+	sub rsp, 8
 	LEA rcx, stringLiteral_0
 	XOR rax, rax
 	CALL printf
-	add rsp, 32
+	ADD rsp, 8
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:
