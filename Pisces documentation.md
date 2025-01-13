@@ -32,8 +32,8 @@ print "%d"
 ```
 **Example:**
 ```psc
-place 5
-place 5
+scan
+scan
 add
 print "The result of your addition is equal to %d"
 end
