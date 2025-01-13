@@ -71,6 +71,54 @@ print "Subtraction complete."
 end
 ```
 
+## `mul`
+Pops two values from the stack, multiplies them, and pushes the result.
+
+**Syntax:**
+```psc
+mul
+```
+**Example**
+```psc
+place 4
+place 5
+mul
+print "Multiplication complete."
+end
+```
+
+## `div`
+Pops two values from the stack, divides the first by the second, and pushes the quotient.
+
+**Syntax:**
+```psc
+div
+```
+**Example**
+```psc
+place 10
+place 2
+div
+print "Division complete."
+end
+```
+
+## `mod`
+Pops two values from the stack, divides the first by the second, and pushes the remainder.
+
+**Syntax:**
+```psc
+mod
+```
+**Example**
+```psc
+place 10
+place 3
+mod
+print "Modulo complete."
+end
+```
+
 ## `jmpEq0`
 Jumps to a specified label if the top stack value is equal to zero.
 
