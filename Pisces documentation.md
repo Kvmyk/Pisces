@@ -26,6 +26,7 @@ print "<your message>"
 print "bul bul bul"
 ```
 It is also possible to print the top of the stack by using the "%d".
+
 **Syntax:**
 ```psc
 print "%d"
