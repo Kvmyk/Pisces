@@ -49,6 +49,7 @@ main:
 	XOR rax, rax
 	CALL printf
 	add rsp, 32
+	PUSH rdx
 ; -- End -- 
 	JMP EXIT_LABEL
 ; -- Label -- 
@@ -60,6 +61,7 @@ L1:
 	XOR rax, rax
 	CALL printf
 	add rsp, 32
+	PUSH rdx
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:

@@ -65,6 +65,7 @@ read_number resq 1; 64-bits int = 8 bytes
 out.write("""; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
+printNumberFormat db "%lld", 0xd, 0xa, 0
 """)
 for i, stringLiteral in enumerate(stringLiterals):
     if i == len(stringLiterals) - 1:
@@ -130,18 +131,14 @@ while ip < len(program):
         stringLiteralIndex = program[ip]
         ip += 1
         out.write(f"; -- Print -- \n")
-        out.write(f"\tPOP rdx\n")
-        if 'scan' not in program:
-            out.write(f"\tsub rsp, 8\n")
-        else:
-            out.write(f"\tsub rsp, 32\n")
+        if 'scan' in program or 'place' in program:
+            out.write(f"\tPOP rax\n")
+        out.write(f"\tsub rsp, 32\n")
         out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
+        out.write(f"\tMOV rdx, rax\n")
         out.write(f"\tXOR rax, rax\n")
         out.write(f"\tCALL printf\n")
-        if 'scan' not in program:
-            out.write(f"\tadd rsp, 8\n")
-        else:
-            out.write(f"\tadd rsp, 32\n")
+        out.write(f"\tadd rsp, 32\n")
     elif opCode == "scan":
         out.write(f"; -- Scan -- \n")
         out.write(f"\tLEA rcx, read_format\n")
@@ -163,6 +160,15 @@ while ip < len(program):
         out.write(f"; -- JmpGt0 -- \n")
         out.write(f"\tCMP qword [rsp], 0\n")
         out.write(f"\tJG {label}\n")
+    elif opCode == "top":
+        out.write(f"; -- Top -- \n")    
+        out.write("\tPOP rax\n")           # Zdejmujemy liczbę ze stosu do RAX
+        out.write("\tsub rsp, 32\n")
+        out.write("\tLEA rcx, [printNumberFormat]\n")
+        out.write("\tMOV rdx, rax\n")      # RDX = wartość do wydruku
+        out.write("\tXOR rax, rax\n")
+        out.write("\tCALL printf\n")
+        out.write("\tadd rsp, 32\n")
     elif opCode == "end":
         out.write(f"; -- End -- \n")
         out.write(f"\tJMP EXIT_LABEL\n")

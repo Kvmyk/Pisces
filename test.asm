@@ -7,8 +7,7 @@ read_number resq 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
-stringLiteral_0 db "%d", 0xd,0xa, 0
-stringLiteral_1 db "eee", 0
+printNumberFormat db "%lld", 0xd, 0xa, 0
 ; -- Entry Point --
 section .text
 global main
@@ -20,29 +19,33 @@ main:
 	PUSH rbp
 	MOV rbp, rsp
 	SUB rsp, 32
-; -- Place -- 
-	PUSH 3
-; -- Place -- 
-	PUSH 3
-; -- Print -- 
-	POP rdx
-	sub rsp, 8
-	LEA rcx, stringLiteral_0
-	XOR rax, rax
-	CALL printf
-	add rsp, 8
-; -- Place -- 
-	PUSH 3
+; -- Scan -- 
+	LEA rcx, read_format
+	LEA rdx, read_number
+	sub rsp, 32
+	CALL scanf
+	add rsp, 32
+	MOV rax, qword [read_number]
+	PUSH rax
+; -- Scan -- 
+	LEA rcx, read_format
+	LEA rdx, read_number
+	sub rsp, 32
+	CALL scanf
+	add rsp, 32
+	MOV rax, qword [read_number]
+	PUSH rax
 ; -- Add -- 
 	POP rax
 	ADD qword [rsp], rax
-; -- Print -- 
-	POP rdx
-	sub rsp, 8
-	LEA rcx, stringLiteral_1
+; -- Top -- 
+	POP rax
+	sub rsp, 32
+	LEA rcx, [printNumberFormat]
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:
