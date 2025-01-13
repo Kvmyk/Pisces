@@ -40,6 +40,16 @@ print "The result of your addition is equal to %d"
 end
 ```
 
+## `top`
+Prints the value from the top of the stack. To make this command work, you have to put something on the stack by using the `scan` or `place` commands.
+
+**Syntax:**
+```psc
+place 1
+top
+end
+```
+
 ## `scan`
 Reads an integer from user input and pushes it onto the stack.
 
