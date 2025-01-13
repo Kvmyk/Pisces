@@ -25,6 +25,19 @@ print "<your message>"
 ```psc
 print "bul bul bul"
 ```
+It is also possible to print the top of the stack by using the "%d".
+**Syntax:**
+```psc
+print "%d"
+```
+**Example:**
+```psc
+place 5
+place 5
+add
+print "The result of your addition is equal to %d"
+end
+```
 
 ## `scan`
 Reads an integer from user input and pushes it onto the stack.
