@@ -7,6 +7,7 @@ read_number resq 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
+printNumberFormat db "%lld", 0xd, 0xa, 0
 stringLiteral_0 db "elo", 0
 ; -- Entry Point --
 section .text
@@ -20,12 +21,12 @@ main:
 	MOV rbp, rsp
 	SUB rsp, 32
 ; -- Print -- 
-	POP rdx
-	sub rsp, 8
+	sub rsp, 32
 	LEA rcx, stringLiteral_0
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	ADD rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:

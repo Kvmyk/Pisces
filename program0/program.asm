@@ -7,6 +7,7 @@ read_number resq 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
+printNumberFormat db "%lld", 0xd, 0xa, 0
 stringLiteral_0 db "not equal", 0xd,0xa, 0
 stringLiteral_1 db "equal", 0
 ; -- Entry Point --
@@ -43,25 +44,25 @@ main:
 	CMP qword [rsp], 0
 	JE L1
 ; -- Print -- 
-	POP rdx
+	POP rax
 	sub rsp, 32
 	LEA rcx, stringLiteral_0
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
 	add rsp, 32
-	PUSH rdx
 ; -- End -- 
 	JMP EXIT_LABEL
 ; -- Label -- 
 L1:
 ; -- Print -- 
-	POP rdx
+	POP rax
 	sub rsp, 32
 	LEA rcx, stringLiteral_1
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
 	add rsp, 32
-	PUSH rdx
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:

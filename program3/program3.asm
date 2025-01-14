@@ -3,10 +3,11 @@ bits 64
 default rel
 ; -- variables --
 section .bss 
-read_number resd 1; 64-bits int = 8 bytes
+read_number resq 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
+printNumberFormat db "%lld", 0xd, 0xa, 0
 stringLiteral_0 db "Negative", 0xd,0xa, 0
 stringLiteral_1 db "Not divisible by 999", 0xd,0xa, 0
 stringLiteral_2 db "Divisible by 999", 0xd,0xa, 0
@@ -37,11 +38,13 @@ main:
 	CMP qword [rsp], 0
 	JG L0
 ; -- Print -- 
-	sub rsp, 8
+	POP rax
+	sub rsp, 32
 	LEA rcx, stringLiteral_0
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 ; -- Label -- 
@@ -58,31 +61,37 @@ L0:
 	CMP qword [rsp], 0
 	JG L0
 ; -- Print -- 
-	sub rsp, 8
+	POP rax
+	sub rsp, 32
 	LEA rcx, stringLiteral_1
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 ; -- Label -- 
 L1:
 ; -- Print -- 
-	sub rsp, 8
+	POP rax
+	sub rsp, 32
 	LEA rcx, stringLiteral_2
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 ; -- Label -- 
 L2:
 ; -- Print -- 
-	sub rsp, 8
+	POP rax
+	sub rsp, 32
 	LEA rcx, stringLiteral_3
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:

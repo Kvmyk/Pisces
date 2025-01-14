@@ -3,10 +3,11 @@ bits 64
 default rel
 ; -- variables --
 section .bss 
-read_number resd 1; 64-bits int = 8 bytes
+read_number resq 1; 64-bits int = 8 bytes
 ; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
+printNumberFormat db "%lld", 0xd, 0xa, 0
 stringLiteral_0 db "Suma wynikow nie jest podzielna przez 2", 0xd,0xa, 0
 stringLiteral_1 db "Suma wynikow jest podzielna przez 2", 0
 ; -- Entry Point --
@@ -56,21 +57,25 @@ L1:
 	CMP qword [rsp], 0
 	JG L1
 ; -- Print -- 
-	sub rsp, 8
+	POP rax
+	sub rsp, 32
 	LEA rcx, stringLiteral_0
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 ; -- Label -- 
 L2:
 ; -- Print -- 
-	sub rsp, 8
+	POP rax
+	sub rsp, 32
 	LEA rcx, stringLiteral_1
+	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
-	add rsp, 8
+	add rsp, 32
 ; -- End -- 
 	JMP EXIT_LABEL
 EXIT_LABEL:
