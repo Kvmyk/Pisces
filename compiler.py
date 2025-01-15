@@ -1,80 +1,115 @@
 import sys
 import os
-import time  # Importujemy moduł time
+import time
 
-programFilePath = sys.argv[1]
+class Instruction:
+    @staticmethod
+    def handle_instruction(op_code, program, ip, out):
+        if op_code.endswith(":"):
+            out.write(f"; -- Label -- \n")
+            out.write(f"{op_code}\n")
+        elif op_code == "place":
+            number = program[ip]
+            ip += 1
+            out.write(f"; -- Place -- \n")
+            out.write(f"\tPUSH {number}\n")
+        elif op_code == "pop":
+            out.write(f"; -- Pop -- \n")
+            out.write(f"\tPOP rax\n")
+        elif op_code == "add":
+            out.write(f"; -- Add -- \n")
+            out.write(f"\tPOP rax\n")
+            out.write(f"\tADD qword [rsp], rax\n")
+        elif op_code == "sub":
+            out.write(f"; -- Sub -- \n")
+            out.write(f"\tPOP rax\n")
+            out.write(f"\tSUB qword [rsp], rax\n")
+        elif op_code == "mul":
+            out.write(f"; -- Mul -- \n")
+            out.write(f"\tPOP rax\n")
+            out.write(f"\tIMUL rax, qword [rsp]\n")
+            out.write(f"\tMOV qword [rsp], rax\n")
+        elif op_code == "div":
+            out.write(f"; -- Div -- \n")
+            out.write(f"\tPOP rbx\n")
+            out.write(f"\tMOV rdx, 0\n")
+            out.write(f"\tIDIV rbx\n")
+            out.write(f"\tMOV qword [rsp], rax\n")
+        elif op_code == "scan":
+            out.write(f"; -- Scan -- \n")
+            out.write(f"\tLEA rcx, read_format\n")
+            out.write(f"\tLEA rdx, read_number\n")
+            out.write(f"\tsub rsp, 32\n") 
+            out.write(f"\tCALL scanf\n")
+            out.write(f"\tadd rsp, 32\n")
+            out.write(f"\tMOV rax, qword [read_number]\n")  
+            out.write(f"\tPUSH rax\n")
+        elif op_code == "print":
+            string_literal_index = program[ip]
+            ip += 1
+            out.write(f"; -- Print -- \n")
+            if 'scan' in program or 'place' in program:
+                out.write(f"\tPOP rax\n")
+            out.write(f"\tsub rsp, 32\n")
+            out.write(f"\tLEA rcx, stringLiteral_{string_literal_index}\n")
+            out.write(f"\tMOV rdx, rax\n")
+            out.write(f"\tXOR rax, rax\n")
+            out.write(f"\tCALL printf\n")
+            out.write(f"\tadd rsp, 32\n")
+        elif op_code == "top":
+            out.write(f"; -- Top -- \n")
+            out.write(f"\tPOP rax\n")
+            out.write(f"\tsub rsp, 32\n")
+            out.write(f"\tLEA rcx, [printNumberFormat]\n")
+            out.write(f"\tMOV rdx, rax\n")
+            out.write(f"\tXOR rax, rax\n")
+            out.write(f"\tCALL printf\n")
+            out.write(f"\tadd rsp, 32\n")
+        elif op_code == "jmpEq0":
+            label = program[ip]
+            ip += 1
+            out.write(f"; -- JmpEq0 -- \n")
+            out.write(f"\tCMP qword [rsp], 0\n")
+            out.write(f"\tJE {label}\n")
+        elif op_code == "jmpGt0":
+            label = program[ip]
+            ip += 1
+            out.write(f"; -- JmpGt0 -- \n")
+            out.write(f"\tCMP qword [rsp], 0\n")
+            out.write(f"\tJG {label}\n")
+        elif op_code == "end":
+            out.write(f"; -- End -- \n")
+            out.write(f"\tJMP EXIT_LABEL\n")
+        return ip
 
-print("[PiscesCMD] Parsing...")
-
-programLines = []
-
-# ODCZYTUJEMY LINIE Z PLIKU
-with open(programFilePath, "r") as programFile:
-    programLines = [line.strip() for line in programFile.readlines()]
-
-program = []
-for line in programLines:
-    parts = line.split(" ")
-    opCode = parts[0]
-
-    if opCode == "":
-        continue
-    # zapisujemy komende do listy tokenow
-    program.append(opCode)
-
-    # sprawdzanie każdego tokenu, czy nie ma dodatkowych argumentów
-    if opCode == "place":
-        number = int(parts[1])
-        program.append(number)
-    elif opCode == "print":
-        stringLiteral = ' '.join(parts[1:])[1:-1]
-        program.append(stringLiteral)
-    elif opCode == "jmpEq0":
-        label = parts[1]
-        program.append(label)
-    elif opCode == "jmpGt0":
-        label = parts[1]
-        program.append(label)
-
-stringLiterals = []  # Add this to collect strings
-for ip in range(len(program)):
-    if program[ip] == "print":
-        stringLiteral = program[ip+1]
-        program[ip+1] = len(stringLiterals)
-        stringLiterals.append(stringLiteral) 
-
-print("[PiscesCMD] Parsing complete")
-
-# zamien jezyk na assembler
-
-print("[PiscesCMD] Assembling...")
-
-asmFilePath = programFilePath[:-4] + ".asm"
-out = open(asmFilePath, "w")
-
-out.write("""; -- header --
+class AsmGenerator:
+    @staticmethod
+    def generate_asm_header(out):
+        out.write("""; -- header --
 bits 64
 default rel
 """)
 
-out.write("""; -- variables --
+    @staticmethod
+    def generate_asm_variables(out):
+        out.write("""; -- variables --
 section .bss 
 read_number resq 1; 64-bits int = 8 bytes
 """)
 
-out.write("""; -- constants --
+    @staticmethod
+    def generate_asm_constants(out, string_literals):
+        out.write("""; -- constants --
 section .data
 read_format db "%d", 0; the format string for scanf
 printNumberFormat db "%lld", 0xd, 0xa, 0
 """)
-for i, stringLiteral in enumerate(stringLiterals):
-    if i == len(stringLiterals) - 1:
-        out.write(f"stringLiteral_{i} db \"{stringLiteral}\", 0\n")
-    else:
-        out.write(f"stringLiteral_{i} db \"{stringLiteral}\", 0xd,0xa, 0\n")
-    
+        for i, string_literal in enumerate(string_literals):
+            out.write(f"stringLiteral_{i} db \"{string_literal}\", 0\n")
 
-out.write("""; -- Entry Point --
+    @staticmethod
+    def generate_asm_entry_point(out):
+        out.write("""; -- Entry Point --
 section .text
 global main
 extern ExitProcess
@@ -87,110 +122,80 @@ main:
 \tSUB rsp, 32
 """)
 
-ip = 0
-while ip < len(program):
-    opCode = program[ip]
-    ip += 1   
-    if opCode.endswith(":"):
-        out.write(f"; -- Label -- \n")
-        out.write(f"{opCode}\n")
-    elif opCode == "place":
-        number = program[ip]
-        ip += 1
-        out.write(f"; -- Place -- \n")
-        out.write(f"\tPUSH {number}\n")
-    elif opCode == "pop":
-        out.write(f"; -- Pop -- \n")
-        out.write(f"\tPOP rax\n")
-    elif opCode == "add":
-        out.write(f"; -- Add -- \n")
-        out.write(f"\tPOP rax\n")
-        out.write(f"\tADD qword [rsp], rax\n")
-    elif opCode == "sub":
-        out.write(f"; -- Sub -- \n")
-        out.write(f"\tPOP rax\n")
-        out.write(f"\tSUB qword [rsp], rax\n")
-    elif opCode == "mul":
-        out.write(f"; -- Mul -- \n")
-        out.write(f"\tPOP rax\n")
-        out.write(f"\tIMUL rax, qword [rsp]\n")
-        out.write(f"\tMOV qword [rsp], rax\n")
-    elif opCode == "div":
-        out.write(f"; -- Div -- \n")
-        out.write(f"\tPOP rbx\n"), 
-        out.write(f"\tMOV rdx, 0\n")
-        out.write(f"\tIDIV rbx\n")
-        out.write(f"\tMOV qword [rsp], rax\n")
-    elif opCode == "mod":
-        out.write(f"; -- Mod -- \n")
-        out.write(f"\tPOP rbx\n")
-        out.write(f"\tMOV rdx, 0\n")
-        out.write(f"\tIDIV rbx\n")
-        out.write(f"\tMOV qword [rsp], rdx\n")
-    elif opCode == "print":
-        stringLiteralIndex = program[ip]
-        ip += 1
-        out.write(f"; -- Print -- \n")
-        if 'scan' in program or 'place' in program:
-            out.write(f"\tPOP rax\n")
-        out.write(f"\tsub rsp, 32\n")
-        out.write(f"\tLEA rcx, stringLiteral_{stringLiteralIndex}\n")
-        out.write(f"\tMOV rdx, rax\n")
-        out.write(f"\tXOR rax, rax\n")
-        out.write(f"\tCALL printf\n")
-        out.write(f"\tadd rsp, 32\n")
-    elif opCode == "scan":
-        out.write(f"; -- Scan -- \n")
-        out.write(f"\tLEA rcx, read_format\n")
-        out.write(f"\tLEA rdx, read_number\n")
-        out.write(f"\tsub rsp, 32\n") 
-        out.write(f"\tCALL scanf\n")
-        out.write(f"\tadd rsp, 32\n")
-        out.write(f"\tMOV rax, qword [read_number]\n")  
-        out.write(f"\tPUSH rax\n")  
-    elif opCode == "jmpEq0":
-        label = program[ip]
-        ip +=1
-        out.write(f"; -- JmpEq0 -- \n")
-        out.write(f"\tCMP qword [rsp], 0\n")
-        out.write(f"\tJE {label}\n")
-    elif opCode == "jmpGt0":
-        label = program[ip]
-        ip += 1
-        out.write(f"; -- JmpGt0 -- \n")
-        out.write(f"\tCMP qword [rsp], 0\n")
-        out.write(f"\tJG {label}\n")
-    elif opCode == "top":
-        out.write(f"; -- Top -- \n")    
-        out.write("\tPOP rax\n")           # Zdejmujemy liczbę ze stosu do RAX
-        out.write("\tsub rsp, 32\n")
-        out.write("\tLEA rcx, [printNumberFormat]\n")
-        out.write("\tMOV rdx, rax\n")      # RDX = wartość do wydruku
-        out.write("\tXOR rax, rax\n")
-        out.write("\tCALL printf\n")
-        out.write("\tadd rsp, 32\n")
-    elif opCode == "end":
-        out.write(f"; -- End -- \n")
-        out.write(f"\tJMP EXIT_LABEL\n")
-out.write(f"EXIT_LABEL:\n")
-out.write(f"\tXOR rax, rax\n")
-out.write(f"\tCALL ExitProcess\n")
+class PiscesParser:
+    @staticmethod
+    def parse_program(file_path):
+        with open(file_path, "r") as program_file:
+            lines = [line.strip() for line in program_file.readlines()]
 
+        program = []
+        string_literals = []
+        for line in lines:
+            parts = line.split(" ")
+            op_code = parts[0]
+            if op_code == "":
+                continue
+            program.append(op_code)
 
-out.close()
+            if op_code == "place":
+                program.append(int(parts[1]))
+            elif op_code == "print":
+                string_literal = ' '.join(parts[1:])[1:-1]
+                program.append(len(string_literals))
+                string_literals.append(string_literal)
+            elif op_code == "jmpEq0" or op_code == "jmpGt0":
+                label = parts[1]
+                program.append(label)
+            elif op_code == "scan":
+                continue
+            elif op_code == "end":
+                continue
 
-print("[PiscesCMD] Assembling complete")
-os.system(f"nasm -f win64 {asmFilePath} -o {asmFilePath[:-3]}obj")
-print("[PiscesCMD] Linking...")
-os.system(f"gcc -o {asmFilePath[:-4] + '.exe'} {asmFilePath[:-3]+'obj'} -lkernel32 -lmsvcrt")
-print("[PiscesCMD] Linking complete")
+        return program, string_literals
 
-print("[PiscesCMD] Running...")
+class PiscesCompiler:
+    def __init__(self, file_path):
+        self.file_path = file_path
+        self.asm_file_path = file_path[:-4] + ".asm"
+        self.exe_file_path = file_path[:-4] + ".exe"
 
-start_time = time.time()  # Zaczynamy mierzyć czas
+    def compile(self):
+        print("[PiscesCMD] Parsing...")
+        program, string_literals = PiscesParser.parse_program(self.file_path)
+        print("[PiscesCMD] Parsing complete")
 
-os.system(f"{asmFilePath[:-4] + '.exe'} ")
+        print("[PiscesCMD] Assembling...")
+        with open(self.asm_file_path, "w") as out:
+            AsmGenerator.generate_asm_header(out)
+            AsmGenerator.generate_asm_variables(out)
+            AsmGenerator.generate_asm_constants(out, string_literals)
+            AsmGenerator.generate_asm_entry_point(out)
 
-end_time = time.time()  # Kończymy mierzyć czas
-execution_time = end_time - start_time
-print(f"\n[PiscesCMD] Running complete in {execution_time:.2f} seconds")
+            ip = 0
+            while ip < len(program):
+                op_code = program[ip]
+                ip += 1
+                ip = Instruction.handle_instruction(op_code, program, ip, out)
+
+            out.write(f"EXIT_LABEL:\n")
+            out.write(f"\tXOR rax, rax\n")
+            out.write(f"\tCALL ExitProcess\n")
+
+        print("[PiscesCMD] Assembling complete")
+        print("[PiscesCMD] Linking...")
+        os.system(f"nasm -f win64 {self.asm_file_path} -o {self.asm_file_path[:-3]}obj")
+        os.system(f"gcc -o {self.exe_file_path} {self.asm_file_path[:-3] + 'obj'} -lkernel32 -lmsvcrt")
+        print("[PiscesCMD] Linking complete")
+
+    def run(self):
+        print("[PiscesCMD] Running...")
+        start_time = time.time()
+        os.system(self.exe_file_path)
+        end_time = time.time()
+        print(f"\n[PiscesCMD] Running complete in {end_time - start_time:.2f} seconds")
+
+if __name__ == "__main__":
+    program_file_path = sys.argv[1]
+    compiler = PiscesCompiler(program_file_path)
+    compiler.compile()
+    compiler.run()

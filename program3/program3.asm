@@ -8,9 +8,9 @@ read_number resq 1; 64-bits int = 8 bytes
 section .data
 read_format db "%d", 0; the format string for scanf
 printNumberFormat db "%lld", 0xd, 0xa, 0
-stringLiteral_0 db "Negative", 0xd,0xa, 0
-stringLiteral_1 db "Not divisible by 999", 0xd,0xa, 0
-stringLiteral_2 db "Divisible by 999", 0xd,0xa, 0
+stringLiteral_0 db "Negative", 0
+stringLiteral_1 db "Not divisible by 999", 0
+stringLiteral_2 db "Divisible by 999", 0
 stringLiteral_3 db "Zero", 0
 ; -- Entry Point --
 section .text

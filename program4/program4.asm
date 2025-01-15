@@ -8,7 +8,7 @@ read_number resq 1; 64-bits int = 8 bytes
 section .data
 read_format db "%d", 0; the format string for scanf
 printNumberFormat db "%lld", 0xd, 0xa, 0
-stringLiteral_0 db "Suma wynikow nie jest podzielna przez 2", 0xd,0xa, 0
+stringLiteral_0 db "Suma wynikow nie jest podzielna przez 2", 0
 stringLiteral_1 db "Suma wynikow jest podzielna przez 2", 0
 ; -- Entry Point --
 section .text

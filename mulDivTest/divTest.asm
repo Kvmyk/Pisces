@@ -8,7 +8,7 @@ read_number resq 1; 64-bits int = 8 bytes
 section .data
 read_format db "%d", 0; the format string for scanf
 printNumberFormat db "%lld", 0xd, 0xa, 0
-stringLiteral_0 db "Nie jest", 0xd,0xa, 0
+stringLiteral_0 db "Nie jest", 0
 stringLiteral_1 db "jest", 0
 ; -- Entry Point --
 section .text
@@ -38,11 +38,6 @@ main:
 	MOV qword [rsp], rax
 ; -- Place -- 
 	PUSH 2
-; -- Mod -- 
-	POP rbx
-	MOV rdx, 0
-	IDIV rbx
-	MOV qword [rsp], rdx
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE yes

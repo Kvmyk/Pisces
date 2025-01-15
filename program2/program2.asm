@@ -8,7 +8,7 @@ read_number resq 1; 64-bits int = 8 bytes
 section .data
 read_format db "%d", 0; the format string for scanf
 printNumberFormat db "%lld", 0xd, 0xa, 0
-stringLiteral_0 db "odd", 0xd,0xa, 0
+stringLiteral_0 db "odd", 0
 stringLiteral_1 db "even", 0
 ; -- Entry Point --
 section .text
