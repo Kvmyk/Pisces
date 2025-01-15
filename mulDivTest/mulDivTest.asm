@@ -21,16 +21,33 @@ main:
 	PUSH rbp
 	MOV rbp, rsp
 	SUB rsp, 32
-; -- Place -- 
-	PUSH 3
-; -- Place -- 
-	PUSH 4
+; -- Scan -- 
+	LEA rcx, read_format
+	LEA rdx, read_number
+	sub rsp, 32
+	CALL scanf
+	add rsp, 32
+	MOV rax, qword [read_number]
+	PUSH rax
+; -- Scan -- 
+	LEA rcx, read_format
+	LEA rdx, read_number
+	sub rsp, 32
+	CALL scanf
+	add rsp, 32
+	MOV rax, qword [read_number]
+	PUSH rax
 ; -- Mul -- 
 	POP rax
 	IMUL rax, qword [rsp]
 	MOV qword [rsp], rax
 ; -- Place -- 
 	PUSH 2
+; -- Mod -- 
+	POP rbx
+	MOV rdx, 0
+	IDIV rbx
+	MOV qword [rsp], rdx
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE exit

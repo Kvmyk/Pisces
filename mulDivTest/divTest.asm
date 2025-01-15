@@ -38,6 +38,11 @@ main:
 	MOV qword [rsp], rax
 ; -- Place -- 
 	PUSH 2
+; -- Mod -- 
+	POP rbx
+	MOV rdx, 0
+	IDIV rbx
+	MOV qword [rsp], rdx
 ; -- JmpEq0 -- 
 	CMP qword [rsp], 0
 	JE yes

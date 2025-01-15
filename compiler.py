@@ -35,6 +35,12 @@ class Instruction:
             out.write(f"\tMOV rdx, 0\n")
             out.write(f"\tIDIV rbx\n")
             out.write(f"\tMOV qword [rsp], rax\n")
+        elif op_code == "mod":
+            out.write(f"; -- Mod -- \n")
+            out.write(f"\tPOP rbx\n")
+            out.write(f"\tMOV rdx, 0\n")
+            out.write(f"\tIDIV rbx\n")
+            out.write(f"\tMOV qword [rsp], rdx\n")
         elif op_code == "scan":
             out.write(f"; -- Scan -- \n")
             out.write(f"\tLEA rcx, read_format\n")
@@ -147,6 +153,8 @@ class PiscesParser:
                 label = parts[1]
                 program.append(label)
             elif op_code == "scan":
+                continue
+            elif op_code == "mod":
                 continue
             elif op_code == "end":
                 continue

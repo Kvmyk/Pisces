@@ -1,5 +1,5 @@
-place 3
-place 4
+scan
+scan
 mul
 place 2
 mod
