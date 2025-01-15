@@ -1,3 +1,2 @@
-place 4
-top
+print "kuba boi sie kominiarza"
 end

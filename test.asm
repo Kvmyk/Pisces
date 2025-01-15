@@ -8,6 +8,7 @@ read_number resq 1; 64-bits int = 8 bytes
 section .data
 read_format db "%d", 0; the format string for scanf
 printNumberFormat db "%lld", 0xd, 0xa, 0
+stringLiteral_0 db "kuba boi sie kominiarza", 0
 ; -- Entry Point --
 section .text
 global main
@@ -19,12 +20,9 @@ main:
 	PUSH rbp
 	MOV rbp, rsp
 	SUB rsp, 32
-; -- Place -- 
-	PUSH 4
-; -- Top -- 
-	POP rax
+; -- Print -- 
 	sub rsp, 32
-	LEA rcx, [printNumberFormat]
+	LEA rcx, stringLiteral_0
 	MOV rdx, rax
 	XOR rax, rax
 	CALL printf
